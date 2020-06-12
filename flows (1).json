@@ -1,0 +1,353 @@
+[
+    {
+        "id": "a316b894.55e178",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "6dd8459.99c6abc",
+        "type": "function",
+        "z": "a316b894.55e178",
+        "name": "pre token",
+        "func": "//make user given values as global variables\nglobal.set(\"a\",msg.payload.a);\nglobal.set(\"b\",msg.payload.b);\nglobal.set(\"c\",msg.payload.c);\nglobal.set(\"d\",msg.payload.d);\nglobal.set(\"e\",msg.payload.e);\nglobal.set(\"f\",msg.payload.f);\nglobal.set(\"g\",msg.payload.g);\nglobal.set(\"h\",msg.payload.h);\nglobal.set(\"i\",msg.payload.i);\nglobal.set(\"dip\",msg.payload.dip);\nglobal.set(\"hiv\",msg.payload.hiv);\nglobal.set(\"l\",msg.payload.l);\nglobal.set(\"m\",msg.payload.m);\nglobal.set(\"n\",msg.payload.n);\nglobal.set(\"o\",msg.payload.o);\nglobal.set(\"p\",msg.payload.p);\n//following are required to receive a token\nvar apikey=\"saikhAZir55RB9bAjdFPF_YxhyhzEJM1Fh5xwkBgWdNN\";\nmsg.headers={\"content-type\":\"application/x-www-form-urlencoded\"};\nmsg.payload={\"grant_type\":\"urn:ibm:params:oauth:grant-type:apikey\",\"apikey\":apikey,\"j\":msg.payload.dip,\"k\":msg.payload.hiv};\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 220,
+        "y": 100,
+        "wires": [
+            [
+                "5f4e2a29.d34394",
+                "68915275.72629c"
+            ]
+        ]
+    },
+    {
+        "id": "fd4e98e4.12f2b8",
+        "type": "http request",
+        "z": "a316b894.55e178",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "https://us-south.ml.cloud.ibm.com/v3/wml_instances/167a1e0a-e17e-4174-b51a-6421b2ec6bc1/deployments/c8a5c701-4675-4713-a314-04191419a8f7/online",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 470,
+        "y": 180,
+        "wires": [
+            [
+                "13874734.cba1c9",
+                "4828c4ef.03facc"
+            ]
+        ]
+    },
+    {
+        "id": "c2405273.e4262",
+        "type": "debug",
+        "z": "a316b894.55e178",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 750,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4828c4ef.03facc",
+        "type": "function",
+        "z": "a316b894.55e178",
+        "name": "getFrom Endpoint",
+        "func": "msg.payload=msg.payload.values[0][0];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 280,
+        "wires": [
+            [
+                "c2405273.e4262",
+                "cb2d6798.9b6ee8"
+            ]
+        ]
+    },
+    {
+        "id": "13874734.cba1c9",
+        "type": "debug",
+        "z": "a316b894.55e178",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 710,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "58500008.a70c1",
+        "type": "function",
+        "z": "a316b894.55e178",
+        "name": "sendTo Endpoint",
+        "func": "//get token and make headers\nvar token=msg.payload.access_token;\nvar instance_id=\"167a1e0a-e17e-4174-b51a-6421b2ec6bc1\"\nmsg.headers={'Content-Type': 'application/json',\"Authorization\":\"Bearer \"+token,\"ML-Instance-ID\":instance_id}\n\n//get variables that are set earlier\nvar a = global.get(\"a\");\nvar b = global.get(\"b\");\nvar c = global.get(\"c\");\nvar d = global.get(\"d\");\nvar e = global.get(\"e\");\nvar f = global.get(\"f\");\nvar g = global.get(\"g\");\nvar h = global.get(\"h\");\nvar i = global.get(\"i\");\nvar dip = global.get(\"dip\");\nvar hiv = global.get(\"hiv\");\nvar l = global.get(\"l\");\nvar m = global.get(\"m\");\nvar n = global.get(\"n\");\nvar o = global.get(\"o\");\nvar p = global.get(\"p\");\n//send the user values to service endpoint\nmsg.payload = \n{\"fields\":[\"Status\", \"Adult Mortality\", \"Alcohol\", \"percentage expenditure\",\n       \"Hepatitis B\", \" BMI \", \"under-five deaths \", \"Polio\",\"Total expenditure\",\"Diphtheria \", \" HIV/AIDS\", \"GDP\",\n       \" thinness  1-19 years\", \" thinness 5-9 years\",\n      \"Income composition of resources\", \"Schooling\"],\n\"values\":[[a,b,c,d,e,f,g,h,i,dip,hiv,l,m,n,o,p]]};\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 210,
+        "y": 180,
+        "wires": [
+            [
+                "dbbef8a9.984128",
+                "fd4e98e4.12f2b8"
+            ]
+        ]
+    },
+    {
+        "id": "5f4e2a29.d34394",
+        "type": "http request",
+        "z": "a316b894.55e178",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "https://iam.cloud.ibm.com/identity/token",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "basic",
+        "x": 470,
+        "y": 100,
+        "wires": [
+            [
+                "58500008.a70c1"
+            ]
+        ]
+    },
+    {
+        "id": "899b7bb5.6907a8",
+        "type": "ui_form",
+        "z": "a316b894.55e178",
+        "name": "",
+        "label": "",
+        "group": "988da0ff.eb01e",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Status\t",
+                "value": "a",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Adult Mortality",
+                "value": "b",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Alcohol",
+                "value": "c",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "percentage expenditure",
+                "value": "d",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Hepatitis B\t",
+                "value": "e",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "BMI",
+                "value": "f",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "under-five deaths",
+                "value": "g",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Polio",
+                "value": "h",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Total expenditure",
+                "value": "i",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Diphtheria ",
+                "value": "dip",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "HIV/AIDS",
+                "value": "hiv",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "GDP",
+                "value": "l",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": " thinness  1-19 years",
+                "value": "m",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": " thinness 5-9 years",
+                "value": "n",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Income composition of resources",
+                "value": "o",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Schooling",
+                "value": "p",
+                "type": "number",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "a": "",
+            "b": "",
+            "c": "",
+            "d": "",
+            "e": "",
+            "f": "",
+            "g": "",
+            "h": "",
+            "i": "",
+            "dip": "",
+            "hiv": "",
+            "l": "",
+            "m": "",
+            "n": "",
+            "o": "",
+            "p": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "",
+        "x": 70,
+        "y": 100,
+        "wires": [
+            [
+                "6dd8459.99c6abc"
+            ]
+        ]
+    },
+    {
+        "id": "cb2d6798.9b6ee8",
+        "type": "ui_text",
+        "z": "a316b894.55e178",
+        "group": "988da0ff.eb01e",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Prediction",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 720,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "dbbef8a9.984128",
+        "type": "debug",
+        "z": "a316b894.55e178",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 260,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "68915275.72629c",
+        "type": "debug",
+        "z": "a316b894.55e178",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 380,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "988da0ff.eb01e",
+        "type": "ui_group",
+        "z": "",
+        "name": "Default",
+        "tab": "c3f2606b.60439",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "c3f2606b.60439",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
